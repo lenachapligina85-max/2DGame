@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class CharAnim : MonoBehaviour
 {
+    CharHP HP;
     private Animator _animator;
     private Charactermove personController;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         personController = GetComponent<Charactermove>();
+        HP = GetComponent<CharHP>();
     }
     private void OnEnable()
     {
+        HP.onDeadAnim += DeadAnim;
         personController.onMovePerson += MoveAnim;
         personController.onJumpingPerson += JumpAnim;
         personController.onSliderPerson += SliderAnim;
@@ -22,6 +25,7 @@ public class CharAnim : MonoBehaviour
         personController.onMovePerson -= MoveAnim;
         personController.onJumpingPerson -= JumpAnim;
         personController.onSliderPerson -= SliderAnim;
+        HP.onDeadAnim -= DeadAnim;
     }
     private void MoveAnim(float horizontal)
     {
@@ -34,5 +38,9 @@ public class CharAnim : MonoBehaviour
     private void SliderAnim(bool isSlide)
     {
         _animator.SetBool("isSlider", isSlide);
+    }
+    void DeadAnim()
+    {
+        _animator.SetTrigger("Dead Trigger");
     }
 }

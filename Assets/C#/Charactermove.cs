@@ -24,17 +24,30 @@ public class Charactermove : MonoBehaviour
 
     private bool isSlider = false;
     private bool isJumping = false;
+    private bool isDead = false;
+    CharHP HP;
 
-    
-    
-    void Start()
+    void Awake()
     {
         rigidbodyPerson = GetComponent<Rigidbody2D>();
         transformPerson = GetComponent<Transform>();
+        HP = GetComponent<CharHP>();
     }
+    private void OnEnable()
+    {
+        HP.onDeadAnim += Dead;
+              
+    }
+    private void OnDisable()
+    {
+       HP.onDeadAnim -= Dead;
+    }
+
+   
 
     void Update()
     {
+        if (isDead) return; 
         Slider();
         if (isJumping)
         {
@@ -43,6 +56,10 @@ public class Charactermove : MonoBehaviour
             Moving();
         }
         ScaleDirection();
+    }
+    void Dead()
+    {
+        isDead = true;
     }
     private void SliderToggle()
     {
